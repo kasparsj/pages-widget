@@ -151,9 +151,9 @@ class Walker_Pages_Widget extends Walker_Page {
             $output .= get_the_post_thumbnail($page->ID, array($thumb_size), array('class' => 'alignleft'));
         if ($show_title)
             $output .= '<span class="entry-title">'.apply_filters( 'the_title', $page->post_title, $page->ID ).'</span>';
-        if ($show_content)
-            $output .= '<span class="entry-summary">'.get_the_content().'</span>';
         $output .= $link_after . '</a>';
+        if ($show_content)
+            $output .= '<div class="entry-summary">'.$page->post_content.'</div>';
 
 		if ( !empty($show_date) ) {
 			if ( 'modified' == $show_date )
