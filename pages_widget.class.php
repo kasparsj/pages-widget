@@ -1,5 +1,8 @@
 <?php
 
+// Exit if accessed directly
+if( !defined( 'ABSPATH' ) ) exit;
+
 class Pages_Widget extends WP_Widget_Pages {
 
 	function widget( $args, $instance ) {
