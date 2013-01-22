@@ -153,7 +153,7 @@ class Walker_Pages_Widget extends Walker_Page {
             $output .= '<span class="entry-title">'.apply_filters( 'the_title', $page->post_title, $page->ID ).'</span>';
         $output .= $link_after . '</a>';
         if ($show_content)
-            $output .= '<div class="entry-summary">'.$page->post_content.'</div>';
+            $output .= '<div class="entry-content">'.apply_filters('the_content', $page->post_content).'</div>';
 
 		if ( !empty($show_date) ) {
 			if ( 'modified' == $show_date )
