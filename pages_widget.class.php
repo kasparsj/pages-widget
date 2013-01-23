@@ -19,7 +19,7 @@ class Pages_Widget extends WP_Widget_Pages {
         $show_date = isset( $instance['show_date'] ) ? $instance['show_date'] : false;
         $show_content = isset( $instance['show_content'] ) ? $instance['show_content'] : false;
         $show_thumb = isset( $instance['show_thumb'] ) ? $instance['show_thumb'] : false;
-        $thumb_size = empty( $instance['thumb_size'] ) ? 'thumbnail' : $instance['thumb_size'];
+        $thumb_size = empty( $instance['thumb_size'] ) ? 'post-thumbnail' : $instance['thumb_size'];
         $post_type = empty( $instance['post_type'] ) ? 'post' : $instance['post_type'];
         
         // temporary set hierarchical
@@ -146,14 +146,20 @@ class Walker_Pages_Widget extends Walker_Page {
 
 		$css_class = implode( ' ', apply_filters( 'page_css_class', $css_class, $page, $depth, $args, $current_page ) );
 
-		$output .= $indent . '<li class="' . $css_class . '"><a href="' . get_permalink($page->ID) . '">' . $link_before;
-        if ($show_thumb)
-            $output .= get_the_post_thumbnail($page->ID, array($thumb_size), array('class' => 'alignleft'));
-        if ($show_title)
-            $output .= '<span class="entry-title">'.apply_filters( 'the_title', $page->post_title, $page->ID ).'</span>';
-        $output .= $link_after . '</a>';
+		$output .= $indent . '<li class="' . $css_class . '">';
+        if ($show_thumb && ($thumb = get_the_post_thumbnail($page->ID, (is_numeric($thumb_size) ? array($thumb_size) : $thumb_size))))
+            $output .= '<div class="page-thumbnail">'.$thumb.'</div>';
+        $output .= '<div class="page-wrapper">';
+        if ($show_title) {
+            $permalink = get_permalink($page->ID);
+            if ($permalink)
+                $output .= '<a href="' . $permalink . '">' . $link_before;
+            $output .= '<span class="page-title">'.apply_filters( 'the_title', $page->post_title, $page->ID ).'</span>';
+            if ($permalink)
+                $output .= $link_after . '</a>';
+        }
         if ($show_content)
-            $output .= '<div class="entry-content">'.apply_filters('the_content', $page->post_content).'</div>';
+            $output .= '<div class="page-content">'.apply_filters('the_content', $page->post_content).'</div>';
 
 		if ( !empty($show_date) ) {
 			if ( 'modified' == $show_date )
@@ -163,6 +169,8 @@ class Walker_Pages_Widget extends Walker_Page {
 
 			$output .= " " . mysql2date($date_format, $time);
 		}
+        
+        $output .= '</div>';
 	}
 }
 
