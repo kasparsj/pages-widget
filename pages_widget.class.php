@@ -7,6 +7,8 @@ class Pages_Widget extends WP_Widget_Pages {
 
 	function widget( $args, $instance ) {
 		extract( $args );
+        
+        global $_wp_additional_image_sizes;
 
 		$title = apply_filters('widget_title', empty( $instance['title'] ) ? __( 'Pages' ) : $instance['title'], $instance, $this->id_base);
 		$sortby = empty( $instance['sortby'] ) ? 'menu_order' : $instance['sortby'];
@@ -19,7 +21,7 @@ class Pages_Widget extends WP_Widget_Pages {
         $show_date = isset( $instance['show_date'] ) ? $instance['show_date'] : false;
         $show_content = isset( $instance['show_content'] ) ? $instance['show_content'] : false;
         $show_thumb = isset( $instance['show_thumb'] ) ? $instance['show_thumb'] : false;
-        $thumb_size = empty( $instance['thumb_size'] ) ? 'post-thumbnail' : $instance['thumb_size'];
+        $thumb_size = empty( $instance['thumb_size'] ) ? (isset($_wp_additional_image_sizes['post-thumbnail']) ? 'post-thumbnail' : 'thumbnail') : $instance['thumb_size'];
         $post_type = empty( $instance['post_type'] ) ? 'post' : $instance['post_type'];
         
         // temporary set hierarchical
